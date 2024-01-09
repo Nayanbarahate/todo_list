@@ -6,18 +6,25 @@ export default function AddTodo({ onAddTodo }) {
   const navigate = useNavigate();
 
   const handleAddTodo = () => {
-    setTitle('');
     onAddTodo(title);
     navigate('/todos')
   }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleAddTodo();
+    }
+  };
+
   return (
     <>
       <input
         placeholder="Add todo"
         value={title}
         onChange={e => setTitle(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
-      <button onClick={handleAddTodo}>Add</button>
+      <button disabled={!title} onClick={handleAddTodo}>Add</button>
     </>
   )
 }

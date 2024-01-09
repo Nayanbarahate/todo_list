@@ -1,21 +1,22 @@
 // App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
-import AddTodo from './Main/add';
-import TaskList from './Main/todolist';
-let nextId = 0;
+import AddTodo from './Main/Add';
+import Todolist from './Main/Todolist';
+
+const initialList = [
+  { id: 1, title: 'Buy milk'}
+];
+
 const App = () => {
-  const [todos, setTodos] = useState(
-    []
-  );
+  const [todos, setTodos] = useState(initialList);
 
   function handleAddTodo(title) {
     setTodos([
       ...todos,
       {
-        id: nextId++,
+        id: Date.now(),
         title: title,
-        done: false
       }
     ]);
   }
@@ -48,18 +49,18 @@ const App = () => {
             path="/"
             element={
               <AddTodo
-        onAddTodo={handleAddTodo}
-      />
+                onAddTodo={handleAddTodo}
+              />
             }
           />
           <Route
             path="/todos"
             element={
-              <TaskList
-        todos={todos}
-        onChangeTodo={handleChangeTodo}
-        onDeleteTodo={handleDeleteTodo}
-      />
+              <Todolist
+                todos={todos}
+                onChangeTodo={handleChangeTodo}
+                onDeleteTodo={handleDeleteTodo}
+              />
             }
           />
         </Routes>

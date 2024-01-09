@@ -1,19 +1,14 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-export default function TaskList({
-  todos,
-  onChangeTodo,
-  onDeleteTodo
-}) {
+export default function Todolist({ todos, onChangeTodo, onDeleteTodo }) {
+  const sortedTodos = [...todos].sort((a, b) => b.id - a.id);
+  console.log(sortedTodos);
+
   return (
     <ul>
-      {todos.map(todo => (
+      {sortedTodos.map((todo) => (
         <li key={todo.id}>
-          <Task
-            todo={todo}
-            onChange={onChangeTodo}
-            onDelete={onDeleteTodo}
-          />
+          <Task todo={todo} onChange={onChangeTodo} onDelete={onDeleteTodo} />
         </li>
       ))}
     </ul>
@@ -21,43 +16,38 @@ export default function TaskList({
 }
 
 function Task({ todo, onChange, onDelete }) {
+  console.log(todo);
   const [isEditing, setIsEditing] = useState(false);
-  let todoContent;
-  if (isEditing) {
-    todoContent = (
-      <>
-        <input
-          value={todo.title}
-          onChange={e => {
-            onChange({
-              ...todo,
-              title: e.target.value
-            });
-          }} />
-        <button onClick={() => setIsEditing(false)}>
-          Save
-        </button>
-      </>
-    );
-  } else {
-    todoContent = (
-      <>
-        {todo.title}
-        <button onClick={() => setIsEditing(true)}>
-          Edit
-        </button>
-      </>
-    );
-  }
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    setIsEditing(false);
+  };
+
+  const handleInputChange = (e) => {
+    onChange({
+      ...todo,
+      title: e.target.value,
+    });
+  };
+
   return (
     <div>
-  {todoContent}
-      <button onClick={() => onDelete(todo.id)}>
-        Delete
-      </button>
-
+      {isEditing ? (
+        <>
+          <input value={todo.title} onChange={handleInputChange} />
+          <button onClick={handleSave}>Save</button>
+        </>
+      ) : (
+        <>
+          {todo.title}
+          <button onClick={handleEdit}>Edit</button>
+        </>
+      )}
+      <button onClick={() => onDelete(todo.id)}>Delete</button>
     </div>
-    
-   
   );
 }
